@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 
-import { makeCreateAddressUseCase } from '@/use-cases/factories/make-create-address-use-case'
-import { makeCreatePatientUseCase } from '@/use-cases/factories/make-create-patient-use-case'
-import { makeCreatePreviousTreatmentUseCase } from '@/use-cases/factories/make-create-previous-treatment'
-import { z } from 'zod'
+import { createBodySchema } from '@/schemas/patient-schemas'
+import { makeCreateAddressUseCase } from '@/use-cases/factories/addresses/make-create-address-use-case'
+import { makeCreatePatientUseCase } from '@/use-cases/factories/patients/make-create-patient-use-case'
+import { makeCreateTreatmentUseCase } from '@/use-cases/factories/treatments/make-create-treatment-use-case'
 
 /**
  * Função responsável por lidar com a rota de criação de paciente.
@@ -15,26 +15,6 @@ export async function createController(
     req: FastifyRequest,
     reply: FastifyReply
 ) {
-    // Define o esquema de validação para os dados do paciente
-    const createBodySchema = z.object({
-        name: z.string(),
-        birthday: z.coerce.date(),
-        gender: z.enum(['male', 'female']),
-        phone: z.string(),
-        email: z.string().email(),
-        reason: z.string(),
-        street: z.string(),
-        number: z.string(),
-        complement: z.string().optional(),
-        neighborhood: z.string(),
-        city: z.string(),
-        state: z.string(),
-        zipCode: z.string(),
-        treatment: z.string(),
-        startDate: z.coerce.date(),
-        endDate: z.coerce.date()
-    })
-
     const {
         name,
         birthday,
@@ -55,13 +35,10 @@ export async function createController(
     } = createBodySchema.parse(req.body)
 
     try {
-        // Cria instâncias dos casos de uso
         const createPatientUseCase = makeCreatePatientUseCase()
         const createAddressUseCase = makeCreateAddressUseCase()
-        const createPreviousTreatmentUseCase =
-            makeCreatePreviousTreatmentUseCase()
+        const createPreviousTreatmentUseCase = makeCreateTreatmentUseCase()
 
-        // Executa o caso de uso createPatientUseCase para criar um novo paciente
         const { patient } = await createPatientUseCase.execute({
             name,
             birthday,
@@ -71,7 +48,6 @@ export async function createController(
             phone
         })
 
-        // Executa o caso de uso createAddressUseCase para criar o endereço do paciente
         await createAddressUseCase.execute({
             patient_id: patient.id,
             street,
@@ -83,7 +59,6 @@ export async function createController(
             zip_code: zipCode
         })
 
-        // Executa o caso de uso createPreviousTreatmentUseCase para criar o tratamento anterior do paciente
         await createPreviousTreatmentUseCase.execute({
             patient_id: patient.id,
             treatment,
@@ -91,7 +66,7 @@ export async function createController(
             endDate
         })
 
-        reply.code(201).send({ patient })
+        return reply.code(201).send({ patient })
     } catch (error) {
         if (error instanceof Error) {
             return reply.status(409).send({ message: error.message })

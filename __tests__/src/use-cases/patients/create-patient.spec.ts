@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { CreatePatientUseCase } from './create-patient'
+import { CreatePatientUseCase } from '@/use-cases/patients/create-patient'
 import { InMemoryPatientsRepository } from '@/repositories/in-memory/in-memory-patients-repository'
 
 let patientsRepository: InMemoryPatientsRepository

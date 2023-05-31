@@ -1,4 +1,4 @@
-import { CreatePatientUseCase } from '../patients/create-patient'
+import { CreatePatientUseCase } from '@/use-cases/patients/create-patient'
 import { PrismaPatientsRepository } from '@/repositories/prisma/prisma-patients.repository'
 
 export function makeCreatePatientUseCase() {

@@ -13,14 +13,16 @@ export class GetPatientUseCase {
     constructor(private patientsRepository: PatientsRepository) {}
 
     async execute({
-        patientId: id
+        patientId
     }: GetPatientRequestDTO): Promise<GetPatientResponseDTO> {
-        const patient = await this.patientsRepository.findPatientById(id)
+        const patient = await this.patientsRepository.findById(patientId)
 
         if (!patient) {
             throw new Error('Patient not found')
         }
 
-        return { patient }
+        return {
+            patient
+        }
     }
 }

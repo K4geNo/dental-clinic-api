@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 
 export class PrismaPatientsRepository implements PatientsRepository {
-    async findPatientById(id: string) {
+    async findById(id: string) {
         const patient = await prisma.patient.findUnique({
             where: {
                 id
@@ -12,6 +12,7 @@ export class PrismaPatientsRepository implements PatientsRepository {
 
         return patient
     }
+
     async findByEmail(email: string) {
         const patient = await prisma.patient.findUnique({
             where: {
@@ -21,6 +22,7 @@ export class PrismaPatientsRepository implements PatientsRepository {
 
         return patient
     }
+
     async create(data: Prisma.PatientCreateInput) {
         const patient = await prisma.patient.create({
             data
@@ -28,20 +30,15 @@ export class PrismaPatientsRepository implements PatientsRepository {
 
         return patient
     }
-    async createAddress(data: Prisma.AddressUncheckedCreateInput) {
-        const address = await prisma.address.create({
+
+    async update(id: string, data: Prisma.PatientUpdateInput) {
+        const patient = await prisma.patient.update({
+            where: {
+                id
+            },
             data
         })
 
-        return address
-    }
-    async createPreviousTreatment(
-        data: Prisma.PreviousTreatmentUncheckedCreateInput
-    ) {
-        const previousTreatment = await prisma.previousTreatment.create({
-            data
-        })
-
-        return previousTreatment
+        return patient
     }
 }

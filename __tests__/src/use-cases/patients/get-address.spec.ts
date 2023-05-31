@@ -1,15 +1,15 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
-import { GetPatientUseCase } from './get-patient'
+import { GetAddressUseCase } from '@/use-cases/patients/get-address'
 import { InMemoryPatientsRepository } from '@/repositories/in-memory/in-memory-patients-repository'
 
 let patientsRepository: InMemoryPatientsRepository
-let sut: GetPatientUseCase
+let sut: GetAddressUseCase
 
 describe('Get Patient', () => {
     beforeAll(() => {
         patientsRepository = new InMemoryPatientsRepository()
-        sut = new GetPatientUseCase(patientsRepository)
+        sut = new GetAddressUseCase(patientsRepository)
     })
 
     it('should be able to get a patient', async () => {
@@ -23,18 +23,26 @@ describe('Get Patient', () => {
             id: '1'
         })
 
-        const { patient } = await sut.execute({
-            patientId: createdPatient.id
+        await patientsRepository.createAddress({
+            street: 'any_street',
+            number: 'any_number',
+            neighborhood: 'any_neighborhood',
+            city: 'any_city',
+            state: 'any_state',
+            complement: 'any_complement',
+            zip_code: 'any_zip_code',
+            patient_id: createdPatient.id,
+            id: '1'
         })
 
-        expect(patient.id).toEqual(expect.any(String))
+        const { address } = await sut.execute(createdPatient.id)
+
+        expect(address.id).toEqual(expect.any(String))
     })
 
     it('should not be able to get user profile with wrong id', async () => {
-        await expect(() =>
-            sut.execute({
-                patientId: 'wrong-id'
-            })
-        ).rejects.toBeInstanceOf(Error)
+        await expect(() => sut.execute('wrong_id')).rejects.toBeInstanceOf(
+            Error
+        )
     })
 })

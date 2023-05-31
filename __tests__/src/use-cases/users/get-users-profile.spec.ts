@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { GetUserProfileUseCase } from './get-user-profile'
+import { GetUserProfileUseCase } from '@/use-cases/users/get-user-profile'
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { hash } from 'bcryptjs'
 

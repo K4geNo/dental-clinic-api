@@ -1,4 +1,5 @@
 import { Address } from '@prisma/client'
+import { AddressesRepository } from '@/repositories/addresses-repository'
 import { PatientsRepository } from '@/repositories/patients-repository'
 
 export interface CreateAddressRequestDTO {
@@ -17,7 +18,10 @@ interface CreateAddressResponseDTO {
 }
 
 export class CreateAddressUseCase {
-    constructor(private patientsRepository: PatientsRepository) {}
+    constructor(
+        private patientsRepository: PatientsRepository,
+        private addressesRepository: AddressesRepository
+    ) {}
 
     async execute({
         street,
@@ -29,13 +33,11 @@ export class CreateAddressUseCase {
         zip_code,
         patient_id
     }: CreateAddressRequestDTO): Promise<CreateAddressResponseDTO> {
-        const patientNotFound = await this.patientsRepository.findPatientById(
-            patient_id
-        )
+        const patient = await this.patientsRepository.findById(patient_id)
 
-        if (!patientNotFound) throw new Error('Patient not found')
+        if (!patient) throw new Error('Patient not found')
 
-        const address = await this.patientsRepository.createAddress({
+        const address = await this.addressesRepository.create({
             city,
             complement,
             number,

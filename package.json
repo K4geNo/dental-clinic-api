@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "test": "vitest run --dir src/use-cases",
-    "test:watch": "vitest run --dir src/use-cases",
+    "test": "vitest run --dir __tests__/src/use-cases",
     "lint": "eslint"
   },
   "keywords": [],

@@ -34,22 +34,22 @@ model Patient {
   email      String   @unique
   reason     String
 
-  Addresses          Address[]
-  PreviousTreatments PreviousTreatment[]
+  Addresses  Address[]
+  Treatments Treatment[]
 
   @@map("patients")
 }
 
-model PreviousTreatment {
-  id         String   @id @default(uuid())
-  treatment  String
-  start_date DateTime
-  end_date   DateTime
+model Treatment {
+  id         String    @id @default(uuid())
+  treatment  String?
+  start_date DateTime?
+  end_date   DateTime?
 
-  Patients    Patient? @relation(fields: [patients_id], references: [id])
-  patients_id String?
+  Patients   Patient @relation(fields: [patient_id], references: [id])
+  patient_id String
 
-  @@map("previous_treatments")
+  @@map("treatments")
 }
 
 model Address {
@@ -62,8 +62,8 @@ model Address {
   state        String
   zip_code     String
 
-  Patients   Patient? @relation(fields: [patient_id], references: [id])
-  patient_id String?
+  Patients   Patient @relation(fields: [patient_id], references: [id])
+  patient_id String
 
   @@map("addresses")
 }

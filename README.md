@@ -10,9 +10,9 @@
 
 - [x] Cadastro de pacientes: A aplicação deve permitir o cadastro de pacientes com as informações básicas, como nome completo, data de nascimento, gênero, endereço completo, telefone e e-mail. Além disso, deve ser possível registrar informações sobre o motivo da consulta e tratamentos anteriores do paciente.
 
-- [ ] Edição de informações do paciente: O sistema deve permitir a edição das informações do paciente, caso haja necessidade de atualização dos dados.
+- [x] Edição de informações do paciente: O sistema deve permitir a edição das informações do paciente, caso haja necessidade de atualização dos dados.
 
-- [ ] Visualização de informações do paciente: Deve ser possível visualizar as informações cadastradas do paciente, como nome, data de nascimento, telefone, e-mail, entre outras.
+- [x] Visualização de informações do paciente: Deve ser possível visualizar as informações cadastradas do paciente, como nome, data de nascimento, telefone, e-mail, entre outras.
 
 - [ ] Busca por pacientes cadastrados: A aplicação deve permitir a busca por pacientes cadastrados, facilitando o acesso às informações dos mesmos.
   
@@ -35,5 +35,4 @@
 ## Conclusão
 
 - Benefícios do uso do dashboard: O uso do dashboard traz inúmeros benefícios para o consultório, como o aumento da produtividade, organização e segurança das informações dos pacientes, além de proporcionar uma melhor experiência do paciente no consultório.
-****
 - Próximos passos para implementação do projeto: O próximo passo é a contratação de uma equipe de desenvolvimento de software para a implementação do dashboard, garantindo a eficiência e segurança do sistema.

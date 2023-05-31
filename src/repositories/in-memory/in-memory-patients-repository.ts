@@ -1,6 +1,25 @@
-import { Address, Patient, PreviousTreatment } from '@prisma/client'
+import { Address, Patient } from '@prisma/client'
 
 import { PatientsRepository } from '../patients-repository'
+
+interface IUpdatePatientDTO {
+    name: string
+    birthday: Date
+    gender: 'male' | 'female'
+    phone: string
+    email: string
+    reason: string
+    street: string
+    number: string
+    complement?: string
+    neighborhood: string
+    city: string
+    state: string
+    zipCode: string
+    treatment: string
+    startDate: Date
+    endDate: Date
+}
 
 export class InMemoryPatientsRepository implements PatientsRepository {
     public items: Patient[] = []
@@ -30,8 +49,7 @@ export class InMemoryPatientsRepository implements PatientsRepository {
     async create(data: Patient) {
         const patient = {
             ...data,
-            id: Math.random().toString(36),
-            created_at: new Date()
+            id: Math.random().toString(36)
         }
 
         this.items.push(patient)
@@ -42,8 +60,7 @@ export class InMemoryPatientsRepository implements PatientsRepository {
     async createAddress(data: Address) {
         const address = {
             ...data,
-            id: Math.random().toString(36),
-            created_at: new Date()
+            id: Math.random().toString(36)
         }
 
         this.addresses.push(address)
@@ -53,13 +70,56 @@ export class InMemoryPatientsRepository implements PatientsRepository {
 
     async createPreviousTreatment(data: PreviousTreatment) {
         const previousTreatment = {
-            ...data,
-            id: Math.random().toString(36),
-            created_at: new Date()
+            ...data
         }
 
         this.previousTreatments.push(previousTreatment)
 
-        return previousTreatment
+        return [previousTreatment]
+    }
+
+    async update(id: string, data: IUpdatePatientDTO) {
+        const patientIndex = this.items.findIndex(
+            (patient) => patient.id === id
+        )
+
+        if (patientIndex === -1) {
+            throw new Error('Patient not found')
+        }
+
+        const thisPatient = this.items[patientIndex]
+
+        const patient = {
+            ...thisPatient,
+            ...data
+        }
+
+        this.items[patientIndex] = patient
+
+        return patient
+    }
+
+    async findAddressByPatientId(id: string) {
+        const address = this.addresses.find(
+            (address) => address.patient_id === id
+        )
+
+        if (!address) {
+            return null
+        }
+
+        return address
+    }
+
+    async findPreviousTreatmentByPatientId(id: string) {
+        const previousTreatment = this.previousTreatments.find(
+            (previousTreatment) => previousTreatment.patient_id === id
+        )
+
+        if (!previousTreatment) {
+            return null
+        }
+
+        return [previousTreatment]
     }
 }
