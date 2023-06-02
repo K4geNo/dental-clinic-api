@@ -7,7 +7,7 @@ import { compare } from 'bcryptjs'
 let usersRepository: InMemoryUsersRepository
 let sut: RegisterUseCase
 
-describe('RegisterUseCase', () => {
+describe('Register Use Case', () => {
     beforeEach(() => {
         usersRepository = new InMemoryUsersRepository()
         sut = new RegisterUseCase(usersRepository)
