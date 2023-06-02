@@ -33,6 +33,7 @@ model Patient {
   phone      String
   email      String   @unique
   reason     String
+  created_at DateTime @default(now())
 
   Addresses  Address[]
   Treatments Treatment[]
@@ -41,19 +42,20 @@ model Patient {
 }
 
 model Treatment {
-  id         String    @id @default(uuid())
-  treatment  String?
-  start_date DateTime?
-  end_date   DateTime?
+  id         String   @id @default(uuid())
+  treatment  String
+  start_date DateTime
+  end_date   DateTime
+  created_at DateTime @default(now())
 
-  Patients   Patient @relation(fields: [patient_id], references: [id])
+  Patient    Patient @relation(fields: [patient_id], references: [id])
   patient_id String
 
   @@map("treatments")
 }
 
 model Address {
-  id           String  @id @default(uuid())
+  id           String   @id @default(uuid())
   street       String
   number       String
   complement   String?
@@ -61,8 +63,9 @@ model Address {
   city         String
   state        String
   zip_code     String
+  created_at   DateTime @default(now())
 
-  Patients   Patient @relation(fields: [patient_id], references: [id])
+  Patient    Patient @relation(fields: [patient_id], references: [id])
   patient_id String
 
   @@map("addresses")

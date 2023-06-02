@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const createBodySchema = z.object({
+export const patientDataSchema = z.object({
     name: z.string(),
     birthday: z.coerce.date(),
     gender: z.enum(['male', 'female']),
@@ -9,7 +9,7 @@ export const createBodySchema = z.object({
     reason: z.string(),
     street: z.string(),
     number: z.string(),
-    complement: z.string().optional(),
+    complement: z.string(),
     neighborhood: z.string(),
     city: z.string(),
     state: z.string(),

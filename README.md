@@ -14,7 +14,7 @@
 
 - [x] Visualização de informações do paciente: Deve ser possível visualizar as informações cadastradas do paciente, como nome, data de nascimento, telefone, e-mail, entre outras.
 
-- [ ] Busca por pacientes cadastrados: A aplicação deve permitir a busca por pacientes cadastrados, facilitando o acesso às informações dos mesmos.
+- [x] Busca por pacientes cadastrados: A aplicação deve permitir a busca por pacientes cadastrados, facilitando o acesso às informações dos mesmos.
   
 - [ ] Agendamento de consultas: O sistema deve permitir o agendamento de consultas, com a definição da data e hora da consulta, nome do dentista responsável e status da consulta (confirmada, cancelada, entre outros).
   
