@@ -1,5 +1,6 @@
+import { Address, Prisma } from '@prisma/client'
+
 import { AddressesRepository } from '../addresses-repository'
-import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 
 export class PrismaAddressesRepository implements AddressesRepository {
@@ -21,10 +22,10 @@ export class PrismaAddressesRepository implements AddressesRepository {
         return address
     }
 
-    async update(id: string, data: Prisma.AddressUpdateInput) {
+    async update(data: Address) {
         const address = await prisma.address.update({
             where: {
-                id
+                id: data.id
             },
             data
         })

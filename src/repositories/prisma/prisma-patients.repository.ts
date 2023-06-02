@@ -1,4 +1,5 @@
-import { PatientsRepository } from '../patients-repository'
+import { PatientsRepository, UpdatePatientDTO } from '../patients-repository'
+
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 
@@ -14,7 +15,7 @@ export class PrismaPatientsRepository implements PatientsRepository {
     }
 
     async findByEmail(email: string) {
-        const patient = await prisma.patient.findUnique({
+        const patient = await prisma.patient.findFirst({
             where: {
                 email
             }
@@ -31,14 +32,46 @@ export class PrismaPatientsRepository implements PatientsRepository {
         return patient
     }
 
-    async update(id: string, data: Prisma.PatientUpdateInput) {
+    async update(data: UpdatePatientDTO) {
         const patient = await prisma.patient.update({
             where: {
-                id
+                id: data.id
             },
             data
         })
 
         return patient
+    }
+
+    async findAll(page: number) {
+        const patients = await prisma.patient.findMany({
+            skip: (page - 1) * 10,
+            take: 10
+        })
+
+        return patients
+    }
+
+    async search(query: string, page: number) {
+        const patients = await prisma.patient.findMany({
+            where: {
+                OR: [
+                    {
+                        name: {
+                            contains: query
+                        }
+                    },
+                    {
+                        email: {
+                            contains: query
+                        }
+                    }
+                ]
+            },
+            take: 10,
+            skip: (page - 1) * 10
+        })
+
+        return patients
     }
 }

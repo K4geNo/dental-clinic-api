@@ -1,6 +1,6 @@
-import { TreatmentsRepository, UpdateTreatment } from '../treatments-repository'
+import { Prisma, Treatment } from '@prisma/client'
 
-import { Prisma } from '@prisma/client'
+import { TreatmentsRepository } from '../treatments-repository'
 import { prisma } from '@/lib/prisma'
 
 export class PrismaTreatmentsRepository implements TreatmentsRepository {
@@ -22,10 +22,10 @@ export class PrismaTreatmentsRepository implements TreatmentsRepository {
         return treatments
     }
 
-    async update(id: string, data: UpdateTreatment) {
+    async update(data: Treatment) {
         const treatments = await prisma.treatment.update({
             where: {
-                id
+                id: data.id
             },
             data
         })
