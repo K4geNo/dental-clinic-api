@@ -5,17 +5,17 @@ import { makeGetTreatmentsUseCase } from '../factories/treatments/make-get-treat
 export class GetPatientWithDetailsUseCase {
     async execute(patientId: string) {
         const getPatientUseCase = makeGetPatientUseCase()
-        const getAddress = makeGetAddressUseCase()
-        const getPreviousTreatment = makeGetTreatmentsUseCase()
+        const getAddressUseCase = makeGetAddressUseCase()
+        const getTreatmentUseCase = makeGetTreatmentsUseCase()
 
         const { patient } = await getPatientUseCase.execute({ patientId })
-        const addresses = await getAddress.execute(patientId)
-        const previousTreatments = await getPreviousTreatment.execute(patientId)
+        const addresses = await getAddressUseCase.execute(patientId)
+        const treatments = await getTreatmentUseCase.execute(patientId)
 
         const patientDetails = {
             patient,
             addresses,
-            previousTreatments
+            treatments
         }
 
         return patientDetails

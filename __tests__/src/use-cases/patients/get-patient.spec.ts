@@ -20,7 +20,8 @@ describe('Get Patient', () => {
             birth_date: new Date(),
             gender: 'male',
             reason: 'any_reason',
-            id: '1'
+            id: '1',
+            created_at: new Date()
         })
 
         const { patient } = await sut.execute({
