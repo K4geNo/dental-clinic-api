@@ -2,7 +2,8 @@ import { FastifyInstance } from 'fastify'
 import { createController } from './create'
 import { patientsController } from './patients'
 import { prisma } from '@/lib/prisma'
-// import { updateController } from './update'
+import { searchController } from './search'
+import { updateController } from './update'
 import { verifyJWT } from '@/http/middlewares/verify-jwt'
 
 export async function patientsRoutes(app: FastifyInstance) {
@@ -10,7 +11,11 @@ export async function patientsRoutes(app: FastifyInstance) {
 
     app.post('/patients', { onRequest: [verifyJWT] }, createController)
 
-    // app.put('/patients/:id', { onRequest: [verifyJWT] }, updateController)
+    app.put(
+        '/patients/:patientId/:addressId/:treatmentId',
+        { onRequest: [verifyJWT] },
+        updateController
+    )
 
     app.get(
         '/patient-profile/:id',
@@ -18,8 +23,15 @@ export async function patientsRoutes(app: FastifyInstance) {
         patientsController
     )
 
+    app.get('/search-patient', { onRequest: [verifyJWT] }, searchController)
+
     app.get('/patients', { onRequest: [verifyJWT] }, async (request, reply) => {
-        const patients = await prisma.patient.findMany()
+        const patients = await prisma.patient.findMany({
+            include: {
+                Addresses: true,
+                Treatments: true
+            }
+        })
 
         return reply.status(200).send({ patients })
     })

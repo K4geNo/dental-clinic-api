@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 
-import { createBodySchema } from '@/schemas/patient-schemas'
 import { makeCreateAddressUseCase } from '@/use-cases/factories/addresses/make-create-address-use-case'
 import { makeCreatePatientUseCase } from '@/use-cases/factories/patients/make-create-patient-use-case'
 import { makeCreateTreatmentUseCase } from '@/use-cases/factories/treatments/make-create-treatment-use-case'
+import { patientDataSchema } from '@/schemas/patient-schemas'
 
 /**
  * Função responsável por lidar com a rota de criação de paciente.
@@ -32,7 +32,7 @@ export async function createController(
         treatment,
         startDate,
         endDate
-    } = createBodySchema.parse(req.body)
+    } = patientDataSchema.parse(req.body)
 
     try {
         const createPatientUseCase = makeCreatePatientUseCase()
