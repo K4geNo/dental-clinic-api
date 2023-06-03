@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify'
 import { createController } from './create'
+import { getAllController } from './get-all'
 import { patientsController } from './patients'
-import { prisma } from '@/lib/prisma'
 import { searchController } from './search'
 import { updateController } from './update'
 import { verifyJWT } from '@/http/middlewares/verify-jwt'
@@ -25,14 +25,5 @@ export async function patientsRoutes(app: FastifyInstance) {
 
     app.get('/search-patient', { onRequest: [verifyJWT] }, searchController)
 
-    app.get('/patients', { onRequest: [verifyJWT] }, async (request, reply) => {
-        const patients = await prisma.patient.findMany({
-            include: {
-                Addresses: true,
-                Treatments: true
-            }
-        })
-
-        return reply.status(200).send({ patients })
-    })
+    app.get('/patients', { onRequest: [verifyJWT] }, getAllController)
 }
