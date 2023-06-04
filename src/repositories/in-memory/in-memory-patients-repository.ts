@@ -48,10 +48,8 @@ export class InMemoryPatientsRepository implements PatientsRepository {
         return this.items[patientIndex]
     }
 
-    async findAll(page: number) {
-        const patients = this.items.slice((page - 1) * 10, page * 10)
-
-        return patients
+    async findMany(page: number, perPage: number) {
+        return this.items.slice((page - 1) * perPage, page * perPage)
     }
 
     async search(query: string, page: number) {

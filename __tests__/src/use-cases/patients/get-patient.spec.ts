@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
-import { GetPatientUseCase } from '@/use-cases/patients/get-patient'
+import { GetPatientUseCase } from '@/use-cases/patients/get-patients'
 import { InMemoryPatientsRepository } from '@/repositories/in-memory/in-memory-patients-repository'
 
 let patientsRepository: InMemoryPatientsRepository
@@ -13,7 +13,7 @@ describe('Get Patient', () => {
     })
 
     it('should be able to get a patient', async () => {
-        const createdPatient = await patientsRepository.create({
+        await patientsRepository.create({
             name: 'john doe',
             email: 'johndoe@example.com',
             phone: 'any_phone',
@@ -24,18 +24,53 @@ describe('Get Patient', () => {
             created_at: new Date()
         })
 
-        const { patient } = await sut.execute({
-            patientId: createdPatient.id
+        const { patients } = await sut.execute({
+            page: 1,
+            perPage: 10
         })
 
-        expect(patient.id).toEqual(expect.any(String))
+        expect(patients).toHaveLength(1)
     })
 
-    it('should not be able to get user profile with wrong id', async () => {
-        await expect(() =>
-            sut.execute({
-                patientId: 'wrong-id'
-            })
-        ).rejects.toBeInstanceOf(Error)
+    it('should be able to get a patient specifying the page and perPage', async () => {
+        await patientsRepository.create({
+            name: 'john doe',
+            email: 'johndoe@example.com',
+            phone: 'any_phone',
+            birth_date: new Date(),
+            created_at: new Date(),
+            gender: 'male',
+            reason: 'any_reason',
+            id: '1'
+        })
+
+        await patientsRepository.create({
+            name: 'john doe',
+            email: 'johndoe@dev.com',
+            phone: 'any_phone',
+            birth_date: new Date(),
+            created_at: new Date(),
+            gender: 'male',
+            reason: 'any_reason',
+            id: '2'
+        })
+
+        await patientsRepository.create({
+            name: 'john doe',
+            email: 'johndoe@dev.com',
+            phone: 'any_phone',
+            birth_date: new Date(),
+            created_at: new Date(),
+            gender: 'male',
+            reason: 'any_reason',
+            id: '3'
+        })
+
+        const { patients } = await sut.execute({
+            page: 1,
+            perPage: 2
+        })
+
+        expect(patients).toHaveLength(2)
     })
 })

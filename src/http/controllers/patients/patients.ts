@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 
-import { makeGetPatientWithDetailsUseCase } from '@/use-cases/factories/users/make-patient-with-details-use-case'
+import { makeGetPatientUseCase } from '@/use-cases/factories/patients/make-get-patient-use-case'
 import { z } from 'zod'
 
 export async function patientsController(
@@ -8,18 +8,21 @@ export async function patientsController(
     reply: FastifyReply
 ) {
     const paramsSchema = z.object({
-        id: z.string()
+        page: z.string(),
+        perPage: z.string().optional()
     })
 
-    const { id } = paramsSchema.parse(req.params)
+    const { page = 1, perPage = 10 } = paramsSchema.parse(req.query)
 
-    try {
-        const getPatientWithDetails = makeGetPatientWithDetailsUseCase()
+    const pageNumber = Number(page)
+    const perPageNumber = Number(perPage)
 
-        const patientDetails = await getPatientWithDetails.execute(id)
+    const getPatientsUseCase = makeGetPatientUseCase()
 
-        return reply.status(200).send(patientDetails)
-    } catch (error) {
-        return reply.status(400).send({ message: 'Patient not found' })
-    }
+    const patients = await getPatientsUseCase.execute({
+        page: pageNumber,
+        perPage: perPageNumber
+    })
+
+    return reply.status(200).send(patients)
 }

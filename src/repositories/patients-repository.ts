@@ -13,7 +13,7 @@ export interface UpdatePatientDTO {
 export interface PatientsRepository {
     findById(id: string): Promise<Patient | null>
     findByEmail(email: string): Promise<Patient | null>
-    findAll(page: number): Promise<Patient[]>
+    findMany(page: number, perPage: number): Promise<Patient[]>
     create(data: Prisma.PatientCreateInput): Promise<Patient>
     update(data: UpdatePatientDTO): Promise<Patient>
     search(query: string, page: number): Promise<Patient[]>

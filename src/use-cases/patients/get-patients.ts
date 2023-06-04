@@ -2,27 +2,23 @@ import { Patient } from '@prisma/client'
 import { PatientsRepository } from '@/repositories/patients-repository'
 
 interface GetPatientRequestDTO {
-    patientId: string
+    page: number
+    perPage: number
 }
 
 interface GetPatientResponseDTO {
-    patient: Patient
+    patients: Patient[]
 }
 
 export class GetPatientUseCase {
     constructor(private patientsRepository: PatientsRepository) {}
 
     async execute({
-        patientId
+        page,
+        perPage
     }: GetPatientRequestDTO): Promise<GetPatientResponseDTO> {
-        const patient = await this.patientsRepository.findById(patientId)
+        const patients = await this.patientsRepository.findMany(page, perPage)
 
-        if (!patient) {
-            throw new Error('Patient not found')
-        }
-
-        return {
-            patient
-        }
+        return { patients }
     }
 }

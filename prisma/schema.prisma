@@ -46,6 +46,7 @@ model Treatment {
   treatment  String
   start_date DateTime
   end_date   DateTime
+  duration   Int
   created_at DateTime @default(now())
 
   Patient    Patient @relation(fields: [patient_id], references: [id])

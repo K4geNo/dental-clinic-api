@@ -1,6 +1,5 @@
 import { FastifyInstance } from 'fastify'
 import { createController } from './create'
-import { getAllController } from './get-all'
 import { patientsController } from './patients'
 import { searchController } from './search'
 import { updateController } from './update'
@@ -17,13 +16,7 @@ export async function patientsRoutes(app: FastifyInstance) {
         updateController
     )
 
-    app.get(
-        '/patient-profile/:id',
-        { onRequest: [verifyJWT] },
-        patientsController
-    )
+    app.get('/patients', { onRequest: [verifyJWT] }, patientsController)
 
     app.get('/search-patient', { onRequest: [verifyJWT] }, searchController)
-
-    app.get('/patients', { onRequest: [verifyJWT] }, getAllController)
 }

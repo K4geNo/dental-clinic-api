@@ -40,6 +40,7 @@ describe('Create Treatment Use Case', () => {
             treatment: 'Test Treatment',
             startDate: new Date('2020-01-01'),
             endDate: new Date('2020-01-02'),
+            duration: 1,
             patient_id: createdPatient.id
         }
 
@@ -54,6 +55,7 @@ describe('Create Treatment Use Case', () => {
                 treatment: 'Test Treatment',
                 startDate: new Date(),
                 endDate: new Date(),
+                duration: 1,
                 patient_id: 'non-existent-patient-id'
             })
         ).rejects.toBeInstanceOf(Error)

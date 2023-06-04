@@ -43,10 +43,16 @@ export class PrismaPatientsRepository implements PatientsRepository {
         return patient
     }
 
-    async findAll(page: number) {
+    async findMany(page: number, perPage: number) {
+        const skip = (page - 1) * perPage
+
         const patients = await prisma.patient.findMany({
-            skip: (page - 1) * 10,
-            take: 10
+            include: {
+                Addresses: true,
+                Treatments: true
+            },
+            take: perPage,
+            skip
         })
 
         return patients
