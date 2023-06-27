@@ -1,4 +1,5 @@
 import { ZodError } from 'zod'
+import cors from '@fastify/cors'
 import { env } from './env'
 import fastify from 'fastify'
 import fastifyCookie from '@fastify/cookie'
@@ -8,15 +9,20 @@ import { usersRoutes } from './http/controllers/users/routes'
 
 export const app = fastify()
 
+app.register(cors, {
+    origin: true,
+    credentials: true,
+})
+
 app.register(fastifyJWT, {
     secret: env.JWT_SECRET,
     cookie: {
         cookieName: 'refreshToken',
-        signed: false
+        signed: false,
     },
     sign: {
-        expiresIn: '10m'
-    }
+        expiresIn: '10m',
+    },
 })
 
 app.register(fastifyCookie)
@@ -29,7 +35,7 @@ app.setErrorHandler((error, _, reply) => {
     if (error instanceof ZodError) {
         return reply.status(400).send({
             message: 'Validation failed',
-            issues: error.format()
+            issues: error.format(),
         })
     }
 
@@ -41,13 +47,13 @@ app.setErrorHandler((error, _, reply) => {
 
     if (error.statusCode) {
         return reply.status(error.statusCode).send({
-            message: error.message
+            message: error.message,
         })
     }
 
     console.error(error)
 
     return reply.status(500).send({
-        message: 'Internal server error'
+        message: 'Internal server error',
     })
 })

@@ -1,9 +1,9 @@
-import { z } from 'zod'
+import { z } from "zod"
 
 export const patientDataSchema = z.object({
     name: z.string(),
     birthday: z.coerce.date(),
-    gender: z.enum(['male', 'female']),
+    gender: z.enum(["male", "female"]),
     phone: z.string(),
     email: z.string().email(),
     reason: z.string(),
@@ -16,5 +16,5 @@ export const patientDataSchema = z.object({
     zipCode: z.string(),
     treatment: z.string(),
     startDate: z.coerce.date(),
-    endDate: z.coerce.date()
+    endDate: z.coerce.date(),
 })

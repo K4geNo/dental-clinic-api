@@ -15,7 +15,7 @@ export async function authenticateController(
 ) {
     const authenticateBodySchema = z.object({
         email: z.string().email(),
-        password: z.string().min(6)
+        password: z.string().min(6),
     })
 
     const { email, password } = authenticateBodySchema.parse(req.body)
@@ -26,7 +26,7 @@ export async function authenticateController(
         // Executa o caso de uso authenticateUseCase para autenticar o usuário
         const { user } = await authenticateUseCase.execute({
             email,
-            password
+            password,
         })
 
         // Gera um token de autenticação
@@ -34,8 +34,8 @@ export async function authenticateController(
             {},
             {
                 sign: {
-                    sub: user.id
-                }
+                    sub: user.id,
+                },
             }
         )
 
@@ -45,27 +45,27 @@ export async function authenticateController(
             {
                 sign: {
                     sub: user.id,
-                    expiresIn: '7d'
-                }
+                    expiresIn: '7d',
+                },
             }
         )
 
-        // Define um cookie com o token de atualização
+        // TODO: Alterar o httpOnly para true quando o frontend estiver pronto
         return reply
             .setCookie('refreshToken', refreshToken, {
                 path: '/',
-                httpOnly: true,
+                httpOnly: false,
                 secure: true,
-                sameSite: true
+                sameSite: true,
             })
             .status(200)
             .send({
-                token
+                token,
             })
     } catch (error) {
         if (error instanceof Error) {
             return reply.status(400).send({
-                message: error.message
+                message: error.message,
             })
         }
 
